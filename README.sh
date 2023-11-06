@@ -27,5 +27,6 @@ docker run --network mitm-rates-network --ip 192.168.99.3 -d mitm-rates
 # add the IP of ${FQDN} to generated-btcpayserver-1 so that it visits our server instead if it is not already there
 #! docker exec generated-btcpayserver-1 grep -q ${FQDN} /etc/hosts && docker exec generated-btcpayserver-1 sh -c "echo '192.168.99.3 ${FQDN}' >> /etc/hosts"
 ! docker exec generated-btcpayserver-1 grep -q bylls.com /etc/hosts && docker exec generated-btcpayserver-1 sh -c "echo '192.168.99.3 bylls.com' >> /etc/hosts"
+! docker exec generated-btcpayserver-1 grep -q customrates.local /etc/hosts && docker exec generated-btcpayserver-1 sh -c "echo '192.168.99.3 customrates.local' >> /etc/hosts"
 
 #To clean up after testing this proof of concept, remember to remove the SSL cert and change remove ${FQDN} from /etc/hosts

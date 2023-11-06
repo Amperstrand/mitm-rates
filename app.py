@@ -41,6 +41,6 @@ if __name__ == '__main__':
         print(f"{output_file_path} already exists. Skipping data fetch and processing.")
 
 
-    certfile = '/certificates/bylls.com.MITM.crt'
+    certfile = '/certificates/customrates.local.MITM.crt'
     keyfile = '/certificates/MITM.key'
     app.run(ssl_context=(certfile, keyfile), host='192.168.99.3', port=443, debug=True)
