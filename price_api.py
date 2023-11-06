@@ -4,25 +4,35 @@ from flask import jsonify, request
 import requests
 
 def get_price():
+    #Bits is the standard
     from_currency = request.args.get('from_currency', 'BTC')
-    to_currency = request.args.get('to_currency', 'CAD')
+    to_currency = request.args.get('to_currency', 'Bits')
 
-    # Build the URL
-    url = f"https://bylls.com/api/price?from_currency={from_currency}&to_currency={to_currency}"
+    if (to_currency == 'Bits'):
+        to_price = 1000000
+    elif (to_currency == 'CAD'):
+        url = f"https://bylls.com/api/price?from_currency={from_currency}&to_currency={to_currency}"
+        try:
+            # Send a GET request to the external API
+            response = requests.get(url)
+            response.raise_for_status()  # Raise an error for bad responses
+            input_data = response.json()
+            to_price = input_data["public_price"]["to_price"]
+        except requests.exceptions.RequestException as e:
+          return jsonify({'error': 'An error occurred while fetching data from the external API.'}), 500
+    else:
+        return jsonify({'error': 'Unsupported currency'}), 500
 
-    try:
-        # Send a GET request to the external API
-        response = requests.get(url)
-        response.raise_for_status()  # Raise an error for bad responses
+    data = {
+        "public_price": {
+            "from_currency": from_currency,
+            "to_currency": to_currency,
+            "to_price": to_price
+            }
+        }
 
-        # Parse the JSON response from the external API
-        data = response.json()
+    # Add the "mitm" flag with the value "true" at the same level as "public_price"
+    data['custom_mitm_rate'] = True
 
-        # Add the "mitm" flag with the value "true" at the same level as "public_price"
-        data['mitm'] = True
-
-        # Return the modified JSON response
-        return jsonify(data)
-
-    except requests.exceptions.RequestException as e:
-        return jsonify({'error': 'An error occurred while fetching data from the external API.'}), 500
+    # Return the modified JSON response
+    return jsonify(data)

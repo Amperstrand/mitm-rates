@@ -18,9 +18,6 @@ app.add_url_rule('/api/price', 'get_price', get_price, methods=['GET'])
 def exchange_rates():
     return send_from_directory('/tmp', 'exchange_rates_10x.json')
 
-def exchange_rates():
-    return send_from_directory('/tmp', 'exchange_rates_10x.json')
-
 if __name__ == '__main__':
 
     output_file_path = '/tmp/exchange_rates_10x.json'
