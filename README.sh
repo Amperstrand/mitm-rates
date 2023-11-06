@@ -1,16 +1,19 @@
 # mitm-rates
 
-FQDN=api.coingecko.com
-url=https://{FQDN}/api/v3/exchange_rates
+FQDNs=("bylls.com" "api.coingecko.com")
 
 echo "This is ment as a proof of concept. Don't run it in production of an idea explained here: https://github.com/btcpayserver/btcpayserver/discussions/2489#discussioncomment-7429013"
-echo "It starts a python server that serves a static version of ${url} with 10 times the exchange rate"
+
+openssl genpkey -algorithm RSA -out certificates/MITM.key
 
 #generate a selfsigned SSL cert
-openssl req -x509 -nodes -days 36500 -newkey rsa:2048 -keyout certificates/${FQDN}.MITM.key -out certificates/${FQDN}.MITM.crt -subj "/C=US/ST=YourState/L=YourCity/O=YourOrganization/OU=YourDepartment/CN=${FQDN}"
+for fqdn in "${FQDNs[@]}"; do
+    openssl req -x509 -nodes -days 36500 -newkey rsa:2048 -key certificates/MITM.key -out certificates/${fqdn}.MITM.crt -subj "/C=US/ST=YourState/L=YourCity/O=YourOrganization/OU=YourDepartment/CN=${fqdn}"
+done
 
 #deploy the selfsigned SSL cert to btcpayserver
-docker cp certificates/${FQDN}.MITM.crt generated-btcpayserver-1:/usr/local/share/ca-certificates/
+docker cp certificates/api.coingecko.com.MITM.crt generated-btcpayserver-1:/usr/local/share/ca-certificates/
+docker cp certificates/bylls.com.MITM.crt         generated-btcpayserver-1:/usr/local/share/ca-certificates/
 docker exec -it generated-btcpayserver-1 update-ca-certificates
 
 docker build -t mitm-rates .
