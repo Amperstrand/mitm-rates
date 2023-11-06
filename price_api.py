@@ -8,7 +8,7 @@ def get_price():
     from_currency = request.args.get('from_currency', 'BTC')
     to_currency = request.args.get('to_currency', 'Bits')
 
-    if (to_currency == 'Bits'):
+    if to_currency.lower() == 'bits':
         to_price = 1000000
     elif (to_currency == 'CAD'):
         url = f"https://bylls.com/api/price?from_currency={from_currency}&to_currency={to_currency}"
