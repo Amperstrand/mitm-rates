@@ -30,3 +30,14 @@ docker run --network mitm-rates-network --ip 192.168.99.3 -d mitm-rates
 ! docker exec generated-btcpayserver-1 grep -q customrates.local /etc/hosts && docker exec generated-btcpayserver-1 sh -c "echo '192.168.99.3 customrates.local' >> /etc/hosts"
 
 #To clean up after testing this proof of concept, remember to remove the SSL cert and change remove ${FQDN} from /etc/hosts
+
+
+
+#To build and run a custom btcpayserver with a custom rates provider:
+# Install btcpayserver with docker
+# git clone https://github.com/Amperstrand/btcpayserver/
+# docker build -t my-custom-btcpayserver -f amd64.Dockerfile .
+# edit your ${BTCPAY_DOCKER_COMPOSE} (btcpayserver-docker/Generated/docker-compose.generated.yml) and
+#   change image: ${BTCPAY_IMAGE:-btcpayserver/btcpayserver:1.11.7}
+#   to     image: my-custom-btcpayserver
+# btcpay-restart.sh
