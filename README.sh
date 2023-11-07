@@ -1,6 +1,6 @@
 # mitm-rates
 
-FQDNs=("customrates.local" "bylls.com" "api.coingecko.com")
+FQDNs=("customrates.local" "public.bitbank.cc" "bylls.com" "api.coingecko.com")
 
 echo "This is ment as a proof of concept. Don't run it in production of an idea explained here: https://github.com/btcpayserver/btcpayserver/discussions/2489#discussioncomment-7429013"
 
@@ -14,6 +14,7 @@ done
 #deploy the selfsigned SSL cert to btcpayserver
 docker cp certificates/api.coingecko.com.MITM.crt generated-btcpayserver-1:/usr/local/share/ca-certificates/
 docker cp certificates/bylls.com.MITM.crt         generated-btcpayserver-1:/usr/local/share/ca-certificates/
+docker cp certificates/public.bitbank.cc.MITM.crt         generated-btcpayserver-1:/usr/local/share/ca-certificates/
 docker cp certificates/customrates.local.MITM.crt       generated-btcpayserver-1:/usr/local/share/ca-certificates/
 docker exec -it generated-btcpayserver-1 update-ca-certificates
 
@@ -27,6 +28,7 @@ docker run --network mitm-rates-network --ip 192.168.99.3 -d mitm-rates
 # add the IP of ${FQDN} to generated-btcpayserver-1 so that it visits our server instead if it is not already there
 #! docker exec generated-btcpayserver-1 grep -q ${FQDN} /etc/hosts && docker exec generated-btcpayserver-1 sh -c "echo '192.168.99.3 ${FQDN}' >> /etc/hosts"
 ! docker exec generated-btcpayserver-1 grep -q bylls.com /etc/hosts && docker exec generated-btcpayserver-1 sh -c "echo '192.168.99.3 bylls.com' >> /etc/hosts"
+! docker exec generated-btcpayserver-1 grep -q public.bitbank.cc /etc/hosts && docker exec generated-btcpayserver-1 sh -c "echo '192.168.99.3 public.bitbank.cc' >> /etc/hosts"
 ! docker exec generated-btcpayserver-1 grep -q customrates.local /etc/hosts && docker exec generated-btcpayserver-1 sh -c "echo '192.168.99.3 customrates.local' >> /etc/hosts"
 
 #To clean up after testing this proof of concept, remember to remove the SSL cert and change remove ${FQDN} from /etc/hosts

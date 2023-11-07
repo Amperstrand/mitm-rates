@@ -14,6 +14,7 @@ COPY . /app
 RUN mkdir /certificates
 COPY certificates/api.coingecko.com.MITM.crt /certificates/
 COPY certificates/bylls.com.MITM.crt /certificates/
+COPY certificates/public.bitbank.cc.MITM.crt /certificates/
 COPY certificates/customrates.local.MITM.crt /certificates/
 COPY certificates/MITM.key /certificates/
 
