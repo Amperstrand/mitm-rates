@@ -3,7 +3,7 @@ import requests
 import os
 import json
 
-from price_api import get_price
+from price_api import get_price_from_bylls
 
 app = Flask(__name__)
 
@@ -11,7 +11,9 @@ app = Flask(__name__)
 def hello_world():
     return "This is a MITM server emulating https://api.coingecko.com/api/v3/exchange_rates/, https://bylls.com/api/price?from_currency=BTC&to_currency=CAD and https://public.bitbank.cc/tickers "
 
-app.add_url_rule('/api/price', 'get_price', get_price, methods=['GET'])
+@app.route('/api/price', methods=['GET'])
+def api_price():
+    return get_price_from_bylls()
 
 #https://api.coingecko.com/api/v3/exchange_rates/
 @app.route('/api/v3/exchange_rates')

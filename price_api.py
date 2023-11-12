@@ -3,7 +3,7 @@
 from flask import jsonify, request
 import requests
 
-def get_price():
+def get_price_from_bylls():
     #Bits is the standard
     from_currency = request.args.get('from_currency', 'BTC')
     to_currency = request.args.get('to_currency', 'Bits')
