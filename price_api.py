@@ -1,7 +1,13 @@
 # price_api.py
 
-from flask import jsonify, request
+from flask import jsonify, request, send_from_directory
 import requests
+
+def get_price_from_coingecko():
+    return send_from_directory('/tmp', 'exchange_rates_10x.json')
+
+def get_price_from_bitbank():
+    return send_from_directory('/tmp', 'bitbank.json')
 
 def get_price_from_bylls():
     #Bits is the standard

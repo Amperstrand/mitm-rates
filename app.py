@@ -1,9 +1,9 @@
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify
 import requests
 import os
 import json
 
-from price_api import get_price_from_bylls
+from price_api import get_price_from_bylls, get_price_from_bitbank, get_price_from_coingecko
 
 app = Flask(__name__)
 
@@ -12,17 +12,17 @@ def hello_world():
     return "This is a MITM server emulating https://api.coingecko.com/api/v3/exchange_rates/, https://bylls.com/api/price?from_currency=BTC&to_currency=CAD and https://public.bitbank.cc/tickers "
 
 @app.route('/api/price', methods=['GET'])
-def api_price():
+def from_bylls():
     return get_price_from_bylls()
 
 #https://api.coingecko.com/api/v3/exchange_rates/
 @app.route('/api/v3/exchange_rates')
-def return_coingecko_10x():
-    return send_from_directory('/tmp', 'exchange_rates_10x.json')
+def from_coingecko():
+    return get_price_from_coingecko()
 
 @app.route('/tickers')
 def return_bitbank():
-    return send_from_directory('/tmp', 'bitbank.json')
+    return get_price_from_bitbank()
 
 if __name__ == '__main__':
 
